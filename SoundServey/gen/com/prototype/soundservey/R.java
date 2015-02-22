@@ -1146,6 +1146,7 @@ containing a value of this type.
         public static final int split_action_bar=0x7f05001e;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
+        public static final int textview_finished=0x7f050045;
         public static final int textview_question=0x7f05003f;
         public static final int textview_recording=0x7f050040;
         public static final int title=0x7f05002b;
@@ -1256,9 +1257,10 @@ containing a value of this type.
         public static final int app_name=0x7f0a000d;
         public static final int string_address=0x7f0a000f;
         public static final int string_name=0x7f0a000e;
-        public static final int string_question=0x7f0a0010;
-        public static final int string_recording=0x7f0a0011;
-        public static final int string_submit=0x7f0a0012;
+        public static final int string_question=0x7f0a0011;
+        public static final int string_recording=0x7f0a0012;
+        public static final int string_submit=0x7f0a0013;
+        public static final int string_thanks=0x7f0a0010;
     }
     public static final class style {
         /**  Mimic text appearance in select_dialog_item.xml 

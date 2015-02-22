@@ -46,11 +46,15 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 	private EditText edittext_address;
 	private ProgressDialog progress;
 
+	private int which_fragment;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.activity_main, container, false);
+
+		which_fragment = getArguments().getInt(GlobalVariable.pos);
 		imageview_recorder = (ImageView) rootView
 				.findViewById(R.id.imageview_recorder);
 		button_sendData = (Button) rootView.findViewById(R.id.button_sendData);
@@ -190,74 +194,85 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 			break;
 		case R.id.button_sendData: {
 
+			// Remove the fragment
+
+			getActivity().sendBroadcast(
+					new Intent().setAction(MainActivity.class.getName())
+							.putExtra(GlobalVariable.pos, which_fragment));
+
 			// send data to backend
+
 			String edittext_address_string = edittext_address.getText()
 					.toString();
 			String edittext_name_string = edittext_name.getText().toString();
-			File recordedfile = new File(mFileName);
-			if (recordedfile.exists() && edittext_address_string != null
-					&& edittext_name_string != null) {
-				progress = new ProgressDialog(getActivity());
-				progress.setMessage("Uploading....");
-				progress.setMax(100);
-				progress.setProgress(0);
-				progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				progress.setIndeterminate(true);
-				progress.show();
+			if(mFileName!=null)
+			{
+				File recordedfile = new File(mFileName);
+				if (recordedfile.exists() && edittext_address_string != null
+						&& edittext_name_string != null) {
+					progress = new ProgressDialog(getActivity());
+					progress.setMessage("Uploading....");
+					progress.setMax(100);
+					progress.setProgress(0);
+					progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					progress.setIndeterminate(true);
+					progress.show();
 
-				CountingTypedFile recording = new CountingTypedFile(
-						"audio/3gp", recordedfile, new ProgressListener() {
+					CountingTypedFile recording = new CountingTypedFile(
+							"audio/3gp", recordedfile, new ProgressListener() {
 
-							@Override
-							public void transferred(long num) {
-								// TODO Auto-generated method stub
-								progress.setProgress((int) num);
-							}
-						});
-
-				getService().updateUser(recording, edittext_address_string,
-						edittext_name_string, new Callback<MODEL_RESPONSE>() {
-
-							@Override
-							public void success(MODEL_RESPONSE data,
-									Response arg1) {
-								// TODO Auto-generated method stub
-								switch (data.getStatus_code()) {
-								case 100:
-									Toast.makeText(getActivity(),
-											data.getMessage(),
-											Toast.LENGTH_SHORT).show();
-									progress.dismiss();
-									break;
-
-								case 200:
-									Toast.makeText(getActivity(),
-											data.getMessage(),
-											Toast.LENGTH_SHORT).show();
-									progress.dismiss();
-
-									break;
+								@Override
+								public void transferred(long num) {
+									// TODO Auto-generated method stub
+									progress.setProgress((int) num);
 								}
-							}
+							});
 
-							@Override
-							public void failure(RetrofitError arg0) {
-								// TODO Auto-generated method stub
-								progress.dismiss();
+					getService().updateUser(recording, edittext_address_string,
+							edittext_name_string, new Callback<MODEL_RESPONSE>() {
 
-								try {
-									// cause can be null
-									Toast.makeText(getActivity(),
-											arg0.getCause().getMessage(),
-											Toast.LENGTH_SHORT).show();
-								} catch (Exception e) {
-									// TODO: handle exception
+								@Override
+								public void success(MODEL_RESPONSE data,
+										Response arg1) {
+									// TODO Auto-generated method stub
+									switch (data.getStatus_code()) {
+									case 100:
+										Toast.makeText(getActivity(),
+												data.getMessage(),
+												Toast.LENGTH_SHORT).show();
+										progress.dismiss();
+										break;
+
+									case 200:
+										Toast.makeText(getActivity(),
+												data.getMessage(),
+												Toast.LENGTH_SHORT).show();
+										progress.dismiss();
+
+										break;
+									}
 								}
 
-							}
-						});
+								@Override
+								public void failure(RetrofitError arg0) {
+									// TODO Auto-generated method stub
+									progress.dismiss();
+
+									try {
+										// cause can be null
+										Toast.makeText(getActivity(),
+												arg0.getCause().getMessage(),
+												Toast.LENGTH_SHORT).show();
+									} catch (Exception e) {
+										// TODO: handle exception
+									}
+
+								}
+							});
+				}
+
 			}
-
+			
 		}
 			break;
 		}

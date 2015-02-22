@@ -1,7 +1,5 @@
 package com.prototype.soundservey;
 
-import java.io.File;
-
 import retrofit.Callback;
 import retrofit.http.Multipart;
 import retrofit.http.POST;

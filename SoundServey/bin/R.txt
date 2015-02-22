@@ -302,6 +302,7 @@ int id showTitle 0x7f050006
 int id split_action_bar 0x7f05001e
 int id submit_area 0x7f050039
 int id tabMode 0x7f050002
+int id textview_finished 0x7f050045
 int id textview_question 0x7f05003f
 int id textview_recording 0x7f050040
 int id title 0x7f05002b
@@ -355,9 +356,10 @@ int string abc_shareactionprovider_share_with_application 0x7f0a000b
 int string app_name 0x7f0a000d
 int string string_address 0x7f0a000f
 int string string_name 0x7f0a000e
-int string string_question 0x7f0a0010
-int string string_recording 0x7f0a0011
-int string string_submit 0x7f0a0012
+int string string_question 0x7f0a0011
+int string string_recording 0x7f0a0012
+int string string_submit 0x7f0a0013
+int string string_thanks 0x7f0a0010
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0b0063
 int style TextAppearance_AppCompat_Base_SearchResult 0x7f0b006d
 int style TextAppearance_AppCompat_Base_SearchResult_Subtitle 0x7f0b006f

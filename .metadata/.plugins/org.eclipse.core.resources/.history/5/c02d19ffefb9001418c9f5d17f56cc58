@@ -1,0 +1,23 @@
+package com.prototype.soundservey;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public abstract class MainAbstractClass extends Activity {
+
+	private ApplicationClass application;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		application = (ApplicationClass) getApplication();
+	}
+
+	public abstract void success(MODEL_RESPONSE data);
+
+	public RestClientInterface getService() {
+		return application.getInterface1();
+	}
+
+}

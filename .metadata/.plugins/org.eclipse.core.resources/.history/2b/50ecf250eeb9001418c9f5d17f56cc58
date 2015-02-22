@@ -1,0 +1,15 @@
+package com.prototype.soundservey;
+
+import java.io.File;
+
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+
+public interface RestClientInterface {
+	
+	@Multipart
+	@POST("/user/photo")
+	void updateUser(@Part("recording") File recording, @Part("name") String description,@Part("address") String address);
+
+}

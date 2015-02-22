@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/edittext_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_margin"
+                android:hint="@string/string_name"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/edittext_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_margin"
+                android:gravity="top|left"
+                android:hint="@string/string_address"
+                android:maxLines="5"
+                android:minLines="4" />
+
+            <TextView
+                android:id="@+id/textview_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_paddingtext"
+                android:text="@string/string_question"
+                android:textSize="@dimen/dimen_sizetext" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_paddingtext" >
+
+                <TextView
+                    android:id="@+id/textview_recording"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dimen_paddingtext"
+                    android:text="@string/string_recording" />
+
+                <ImageView
+                    android:id="@+id/imageview_recorder"
+                    android:layout_width="@dimen/dimen_size_recorded"
+                    android:layout_height="@dimen/dimen_size_recorded"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/textview_recording"
+                    android:contentDescription="@null"
+                    android:src="@drawable/start" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/button_sendData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/dimen_margin"
+                android:text="@string/string_submit" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SoundSer</string>
+    <string name="string_name">Name</string>
+    <string name="string_address">Address</string>
+    <string name="string_question">Question: How will you describe the experience with our representative?</string>
+	<string name="string_recording">Record Response</string>
+</resources>

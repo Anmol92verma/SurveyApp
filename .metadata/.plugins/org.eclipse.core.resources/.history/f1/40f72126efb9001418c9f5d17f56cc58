@@ -1,0 +1,8 @@
+package com.prototype.soundservey;
+
+public class MODEL_RESPONSE {
+	
+	int status_code;
+	String message;
+
+}

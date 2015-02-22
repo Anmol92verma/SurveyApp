@@ -1,0 +1,16 @@
+package com.prototype.soundservey;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public abstract class MainAbstractClass extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+	}
+
+	public abstract void success(MODEL_RESPONSE data);
+
+}

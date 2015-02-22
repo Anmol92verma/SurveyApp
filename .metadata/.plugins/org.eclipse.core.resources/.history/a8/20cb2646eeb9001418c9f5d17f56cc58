@@ -1,0 +1,9 @@
+package com.prototype.soundservey;
+
+public interface RestClientInterface {
+	
+	@Multipart
+	@PUT("/user/photo")
+	User updateUser(@Part("photo") TypedFile photo, @Part("description") TypedString description);
+
+}

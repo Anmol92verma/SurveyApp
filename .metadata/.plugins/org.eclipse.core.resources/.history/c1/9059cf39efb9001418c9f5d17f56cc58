@@ -1,0 +1,187 @@
+package com.prototype.soundservey;
+
+import java.io.File;
+import java.io.IOException;
+
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class MainActivity extends Activity implements OnClickListener {
+
+	private MediaRecorder mediaRecorder;
+	// File path of recorded audio
+	String mFileName;
+	private ImageView imageview_recorder;
+	private boolean working;
+	private Button button_sendData;
+	private EditText edittext_name;
+	private EditText edittext_address;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		imageview_recorder = (ImageView) findViewById(R.id.imageview_recorder);
+		button_sendData = (Button) findViewById(R.id.button_sendData);
+		edittext_name = (EditText) findViewById(R.id.edittext_name);
+		edittext_address = (EditText) findViewById(R.id.edittext_address);
+		imageview_recorder.setImageResource(R.drawable.start);
+		imageview_recorder.setOnClickListener(this);
+		button_sendData.setOnClickListener(this);
+		working = false;
+
+	}
+
+	public void startRecording() {
+		// Verify that the device has a mic first
+		PackageManager pmanager = this.getPackageManager();
+		if (pmanager.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
+			// Set the file location for the audio
+			File directory = new File(
+					Environment.getExternalStorageDirectory(), "soundSurvey");
+			if (!directory.exists()) {
+				directory.mkdirs();
+			}
+			mFileName = directory.getAbsolutePath();
+			mFileName += "/" + System.currentTimeMillis() + ".3gp";
+			// Create the recorder
+			mediaRecorder = new MediaRecorder();
+			// Set the audio format and encoder
+			mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+			mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+			// Setup the output location
+			mediaRecorder.setOutputFile(mFileName);
+			// Start the recording
+			try {
+				mediaRecorder.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mediaRecorder.start();
+			working = true;
+
+		} else { // no mic on device
+			Toast.makeText(this, "This device doesn't have a mic!",
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	public void StopRecording() {
+		// Stop the recording of the audio
+
+		mediaRecorder.stop();
+		mediaRecorder.reset();
+		mediaRecorder.release();
+		working = false;
+
+		insertToMediaDB(new File(mFileName));
+	}
+
+	public void PlaybeforeSending() {
+		MediaPlayer mediaPlayer = new MediaPlayer();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		try {
+			mediaPlayer.setDataSource(mFileName);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // must call prepare first
+		mediaPlayer.start(); // then start
+	}
+
+	public void insertToMediaDB(File audiofile) {
+		// Setup values for the media file
+		ContentValues values = new ContentValues(4);
+		long current = System.currentTimeMillis();
+		values.put(MediaStore.Audio.Media.TITLE, audiofile.getName());
+		values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
+		values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/3gpp");
+		values.put(MediaStore.Audio.Media.DATA, audiofile.getAbsolutePath());
+		ContentResolver contentResolver = getContentResolver();
+		// Construct uris
+		Uri base = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		Uri newUri = contentResolver.insert(base, values);
+
+		// Trigger broadcast to add
+		try {
+			sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+					newUri));
+			Toast.makeText(this, "Saved to " + audiofile.getAbsolutePath(),
+					Toast.LENGTH_SHORT).show();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+
+	@Override
+	public void onClick(View view) {
+		// TODO Auto-generated method stub
+		switch (view.getId()) {
+		case R.id.imageview_recorder: {
+			if (working) {
+				// stop recording
+				StopRecording();
+				imageview_recorder.setImageResource(R.drawable.start);
+			} else {
+				// start recording
+				startRecording();
+				imageview_recorder.setImageResource(R.drawable.stop);
+
+			}
+		}
+			break;
+		case R.id.button_sendData: {
+
+			// send data to backend
+			String edittext_address_string = edittext_address.getText()
+					.toString();
+			String edittext_name_string = edittext_name.getText().toString();
+
+		}
+			break;
+		}
+
+	}
+
+}

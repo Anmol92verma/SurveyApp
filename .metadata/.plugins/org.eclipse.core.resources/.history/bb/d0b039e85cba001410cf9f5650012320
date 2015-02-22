@@ -1,0 +1,89 @@
+package com.prototype.soundservey;
+
+import java.io.File;
+import java.io.IOException;
+
+import com.prototype.soundservey.GlobalVariable.ProgressListener;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class MainActivity extends FragmentActivity {
+
+	// When requested, this adapter returns a DemoObjectFragment,
+	// representing an object in the collection.
+	DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+	ViewPager mViewPager;
+	final ActionBar actionBar = getActionBar();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragment_holder);
+
+		// ViewPager and its adapters use support library
+		// fragments, so use getSupportFragmentManager.
+		mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(
+				getSupportFragmentManager());
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+
+	}
+
+	// Since this is an object collection, use a FragmentStatePagerAdapter,
+	// and NOT a FragmentPagerAdapter.
+	public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+		public DemoCollectionPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int i) {
+			Fragment fragment = new RecordingSurveyFragment();
+			Bundle args = new Bundle();
+			// Our object is just an integer :-P
+			args.putInt(GlobalVariable.pos, i);
+			fragment.setArguments(args);
+			return fragment;
+		}
+
+		@Override
+		public int getCount() {
+			return 3;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return "Survey " + (position + 1);
+		}
+	}
+
+}

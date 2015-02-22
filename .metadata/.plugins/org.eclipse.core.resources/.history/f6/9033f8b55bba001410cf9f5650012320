@@ -1,0 +1,44 @@
+package com.prototype.soundservey;
+
+import android.app.ProgressDialog;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+
+public class RecordingSurveyFragment extends android.support.v4.app.Fragment {
+
+	View rootView;
+	
+	private MediaRecorder mediaRecorder;
+	// File path of recorded audio
+	String mFileName;
+	private ImageView imageview_recorder;
+	private boolean working;
+	private Button button_sendData;
+	private EditText edittext_name;
+	private EditText edittext_address;
+	private ProgressDialog progress;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		rootView = inflater.inflate(R.layout.activity_main, container, false);
+		imageview_recorder = (ImageView) findViewById(R.id.imageview_recorder);
+		button_sendData = (Button) findViewById(R.id.button_sendData);
+		edittext_name = (EditText) findViewById(R.id.edittext_name);
+		edittext_address = (EditText) findViewById(R.id.edittext_address);
+		imageview_recorder.setImageResource(R.drawable.start);
+		imageview_recorder.setOnClickListener(this);
+		button_sendData.setOnClickListener(this);
+		working = false;
+		return rootView;
+	}
+
+}

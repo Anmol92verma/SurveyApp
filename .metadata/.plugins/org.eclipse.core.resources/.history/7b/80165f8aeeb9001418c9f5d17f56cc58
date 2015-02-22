@@ -1,0 +1,25 @@
+package com.prototype.soundservey;
+
+import android.app.Application;
+
+public class ApplicationClass extends Application{
+	
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		RequestInterceptor requestInterceptor = new RequestInterceptor() {
+			  @Override
+			  public void intercept(RequestFacade request) {
+			    request.addHeader("User-Agent", "Retrofit-Sample-App");
+			  }
+			};
+
+			RestAdapter restAdapter = new RestAdapter.Builder()
+			  .setEndpoint("https://api.github.com")
+			  .setRequestInterceptor(requestInterceptor)
+			  .build();
+
+	}
+
+}

@@ -1,0 +1,22 @@
+package com.prototype.soundservey;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
+public abstract class MainAbstractClass extends Fragment {
+
+	private ApplicationClass application;
+
+	@Override
+	public void onAttach() {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		application = (ApplicationClass) getActivity().getApplication();
+	}
+
+	public RestClientInterface getService() {
+		return application.getInterface1();
+	}
+
+}

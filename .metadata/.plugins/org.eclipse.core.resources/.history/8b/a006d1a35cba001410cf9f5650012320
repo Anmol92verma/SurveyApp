@@ -1,0 +1,11 @@
+package com.prototype.soundservey;
+
+public class GlobalVariable {
+
+	public static final String API_URL = "";
+	
+	public interface ProgressListener {
+		 void transferred(long num);
+		}
+
+}

@@ -1257,10 +1257,12 @@ containing a value of this type.
         public static final int app_name=0x7f0a000d;
         public static final int string_address=0x7f0a000f;
         public static final int string_name=0x7f0a000e;
-        public static final int string_question=0x7f0a0011;
-        public static final int string_recording=0x7f0a0012;
-        public static final int string_submit=0x7f0a0013;
-        public static final int string_thanks=0x7f0a0010;
+        public static final int string_question=0x7f0a0013;
+        public static final int string_recording=0x7f0a0014;
+        public static final int string_recording_started=0x7f0a0011;
+        public static final int string_recording_stopped=0x7f0a0010;
+        public static final int string_submit=0x7f0a0015;
+        public static final int string_thanks=0x7f0a0012;
     }
     public static final class style {
         /**  Mimic text appearance in select_dialog_item.xml 

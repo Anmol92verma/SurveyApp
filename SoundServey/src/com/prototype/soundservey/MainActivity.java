@@ -9,17 +9,15 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
 	DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 	ViewPager mViewPager;
-	ActionBar actionBar;
 	ArrayList<Fragment> fragments;
 	private MyReceiver receiver;
 	private IntentFilter filter;
@@ -30,7 +28,6 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.fragment_holder);
 		receiver = new MyReceiver();
 		filter = new IntentFilter(MainActivity.class.getName());
-		actionBar = getSupportActionBar();
 		fragments = new ArrayList<Fragment>();
 
 		// Add 3 fragments m too lazy for a for loop
@@ -42,7 +39,7 @@ public class MainActivity extends ActionBarActivity {
 				getSupportFragmentManager(), fragments);
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mDemoCollectionPagerAdapter);
-
+		mViewPager.setOffscreenPageLimit(3);
 	}
 
 	@Override

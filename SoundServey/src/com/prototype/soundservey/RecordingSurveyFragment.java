@@ -12,6 +12,7 @@ import com.prototype.soundservey.GlobalVariable.ProgressListener;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -100,22 +101,63 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 			}
 			mediaRecorder.start();
 			working = true;
+			initProgress();
+			imageview_recorder.setImageResource(R.drawable.stop);
 
 		} else { // no mic on device
-			Toast.makeText(getActivity(), "This device doesn't have a mic!",
-					Toast.LENGTH_LONG).show();
+			GlobalVariable.showToast(getActivity(),
+					"This device doesn't have a mic!");
 		}
+		
+	}
+
+	void initProgress() {
+		final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setTitle(R.string.string_recording);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
+				"Save recording", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						mProgressDialog.dismiss();
+						StopRecording();
+						insertToMediaDB(new File(mFileName));
+					}
+				});
+
+		mProgressDialog.setButton(ProgressDialog.BUTTON_NEGATIVE,
+				"Stop recording", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						mProgressDialog.dismiss();
+						StopRecording();
+
+					}
+				});
+
+		mProgressDialog
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					public void onCancel(DialogInterface p1) {
+						StopRecording();
+						
+					}
+				});
+
+		mProgressDialog.show();
+		GlobalVariable.showToast(getActivity(),
+				getResources().getString(R.string.string_recording_started));
+
 	}
 
 	public void StopRecording() {
 		// Stop the recording of the audio
+		imageview_recorder.setImageResource(R.drawable.start);
 
+		GlobalVariable.showToast(getActivity(),
+				getResources().getString(R.string.string_recording_stopped));
 		mediaRecorder.stop();
 		mediaRecorder.reset();
 		mediaRecorder.release();
 		working = false;
 
-		insertToMediaDB(new File(mFileName));
 	}
 
 	public void PlaybeforeSending() {
@@ -165,9 +207,9 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 		try {
 			getActivity().sendBroadcast(
 					new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri));
-			Toast.makeText(getActivity(),
-					"Saved to " + audiofile.getAbsolutePath(),
-					Toast.LENGTH_SHORT).show();
+
+			GlobalVariable.showToast(getActivity(),
+					"Saved to " + audiofile.getAbsolutePath());
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -205,8 +247,7 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 			String edittext_address_string = edittext_address.getText()
 					.toString();
 			String edittext_name_string = edittext_name.getText().toString();
-			if(mFileName!=null)
-			{
+			if (mFileName != null) {
 				File recordedfile = new File(mFileName);
 				if (recordedfile.exists() && edittext_address_string != null
 						&& edittext_name_string != null) {
@@ -229,7 +270,8 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 							});
 
 					getService().updateUser(recording, edittext_address_string,
-							edittext_name_string, new Callback<MODEL_RESPONSE>() {
+							edittext_name_string,
+							new Callback<MODEL_RESPONSE>() {
 
 								@Override
 								public void success(MODEL_RESPONSE data,
@@ -237,16 +279,17 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 									// TODO Auto-generated method stub
 									switch (data.getStatus_code()) {
 									case 100:
-										Toast.makeText(getActivity(),
-												data.getMessage(),
-												Toast.LENGTH_SHORT).show();
+
+										GlobalVariable.showToast(getActivity(),
+												data.getMessage());
+
 										progress.dismiss();
 										break;
 
 									case 200:
-										Toast.makeText(getActivity(),
-												data.getMessage(),
-												Toast.LENGTH_SHORT).show();
+										GlobalVariable.showToast(getActivity(),
+												data.getMessage());
+
 										progress.dismiss();
 
 										break;
@@ -260,9 +303,10 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 
 									try {
 										// cause can be null
-										Toast.makeText(getActivity(),
-												arg0.getCause().getMessage(),
-												Toast.LENGTH_SHORT).show();
+
+										GlobalVariable.showToast(getActivity(),
+												arg0.getCause().getMessage());
+
 									} catch (Exception e) {
 										// TODO: handle exception
 									}
@@ -272,7 +316,7 @@ public class RecordingSurveyFragment extends MainAbstractClass implements
 				}
 
 			}
-			
+
 		}
 			break;
 		}
